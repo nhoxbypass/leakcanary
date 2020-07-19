@@ -16,6 +16,7 @@ import shark.HeapObject.HeapPrimitiveArray
 import shark.HprofHeapGraph.Companion.indexHprof
 import shark.HprofRecord.HeapDumpRecord.ObjectRecord
 import shark.HprofRecord.HeapDumpRecord.ObjectRecord.ClassDumpRecord
+import shark.HprofRecord.HeapDumpRecord.ObjectRecord.ClassDumpRecord.FieldRecord
 import shark.HprofRecord.HeapDumpRecord.ObjectRecord.ClassDumpRecord.StaticFieldRecord
 import shark.HprofRecord.HeapDumpRecord.ObjectRecord.InstanceDumpRecord
 import shark.HprofRecord.HeapDumpRecord.ObjectRecord.ObjectArrayDumpRecord
@@ -130,15 +131,15 @@ class HprofHeapGraph internal constructor(
     return index.objectIdIsIndexed(objectId)
   }
 
-  override fun fieldName(
-    classId: Long,
-    nameStringId: Long
-  ): String {
-    return index.fieldName(classId, nameStringId)
-  }
-
   override fun createFieldValuesReader(record: InstanceDumpRecord) =
     FieldValuesReader(record, identifierByteSize)
+
+  internal fun fieldName(
+    classId: Long,
+    fieldRecord: FieldRecord
+  ): String {
+    return index.fieldName(classId, fieldRecord.nameStringId)
+  }
 
   internal fun staticFieldName(
     classId: Long,
